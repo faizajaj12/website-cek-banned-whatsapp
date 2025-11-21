@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Status WhatsApp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variabel CSS untuk tema */
+        :root {
+            --primary-color: #25D366;
+            --secondary-color: #667781;
+            --dark-gray: #3d3d3d;
+            --light-gray: #f0f2f5;
+            --danger-color: #ff4444;
+            --warning-color: #ffbb33;
+            --success-color: #00C851;
+            --text-color: #333333;
+            --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        /* Reset dan gaya dasar */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--light-gray) 0%, #e0e0e0 100%);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container utama */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #ffffff, var(--light-gray));
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: var(--dark-gray);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Navigasi */
+        nav {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 15px;
+        }
+
+        .nav-menu li {
+            margin: 0 15px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-weight: 600;
+            padding: 10px 15px;
+            border-radius: 50px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu a i {
+            margin-right: 8px;
+        }
+
+        .nav-menu a:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Bagian utama */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Panel input dan hasil */
+        .input-panel, .result-panel {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--dark-gray);
+            display: flex;
+            align-items: center;
+        }
+
+        .panel-title i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        /* Form input */
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .phone-input {
+            display: flex;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .phone-input:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
+        }
+
+        .country-code {
+            padding: 15px;
+            background-color: var(--light-gray);
+            font-weight: 600;
+            color: var(--dark-gray);
+            border: none;
+            border-right: 2px solid #ddd;
+        }
+
+        #phone-number {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        /* Tombol - menggunakan prinsip dari CSS Buttons [citation:2] */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 5px;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-primary:hover {
+            background-color: #1da851;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6974;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #cc3333;
+            transform: translateY(-2px);
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        /* Hasil pemeriksaan */
+        .result-content {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .status-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .status-safe {
+            color: var(--success-color);
+        }
+
+        .status-banned {
+            color: var(--danger-color);
+        }
+
+        .status-warning {
+            color: var(--warning-color);
+        }
+
+        .status-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .status-message {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            padding: 0 10px;
+        }
+
+        .motivation-message {
+            background-color: var(--light-gray);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-style: italic;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        /* Efek suara */
+        .sound-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .sound-control:hover {
+            transform: scale(1.1);
+        }
+
+        .sound-control i {
+            font-size: 1.2rem;
+            color: var(--dark-gray);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <h1>Cek Status Banned WhatsApp</h1>
+            <p class="subtitle">Periksa apakah nomor WhatsApp Anda terkena banned, tetap tenang dan jangan menyerah!</p>
+        </header>
+
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="#"><i class="fas fa-home"></i> Beranda</a></li>
+                <li><a href="#"><i class="fas fa-search"></i> Cek Status</a></li>
+                <li><a href="#"><i class="fas fa-info-circle"></i> Informasi</a></li>
+                <li><a href="#"><i class="fas fa-question-circle"></i> Bantuan</a></li>
+                <li><a href="#"><i class="fas fa-envelope"></i> Kontak</a></li>
+            </ul>
+        </nav>
+
+        <div class="main-content">
+            <div class="input-panel">
+                <h2 class="panel-title"><i class="fas fa-mobile-alt"></i> Masukkan Nomor WhatsApp</h2>
+                
+                <div class="input-group">
+                    <label for="phone-number">Nomor Telepon (tanpa kode negara)</label>
+                    <div class="phone-input">
+                        <div class="country-code">+62</div>
+                        <input type="tel" id="phone-number" placeholder="8123456789" maxlength="15">
+                    </div>
+                </div>
+                
+                <button id="check-btn" class="btn btn-primary btn-block">
+                    <i class="fas fa-search"></i> Cek Status Sekarang
+                </button>
+                
+                <div class="button-group">
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-history"></i> Riwayat
+                    </button>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-share-alt"></i> Bagikan
+                    </button>
+                    <button class="btn btn-danger">
+                        <i class="fas fa-volume-mute"></i> Report
+                    </button>
+                </div>
+            </div>
+            
+            <div class="result-panel">
+                <h2 class="panel-title"><i class="fas fa-chart-bar"></i> Hasil Pemeriksaan</h2>
+                
+                <div class="result-content">
+                    <div class="status-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3 class="status-title">Belum Diperiksa</h3>
+                    <p class="status-message">Masukkan nomor WhatsApp dan klik "Cek Status" untuk memeriksa.</p>
+                    
+                    <div class="motivation-message">
+                        "Nomor Anda ke banned? Tetaplah merendah hati, janganlah menyerah. Masih banyak hal baik yang bisa dilakukan."
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 Cek Status WhatsApp. Website ini tidak berafiliasi dengan WhatsApp Inc.</p>
+            <p>Gunakan dengan bijak. Jika nomor Anda terbanned, ikuti prosedur resmi WhatsApp untuk mengajukan banding [citation:1][citation:5].</p>
+        </footer>
+    </div>
+    
+    <div class="sound-control" id="sound-control">
+        <i class="fas fa-volume-up"></i>
+    </div>
+
+    <!-- Elemen Audio untuk Efek Suara -->
+    <audio id="scary-sound" loop>
+        <source src="https://soundbible.com/mp3/Creepy%20Background%20Music-Daniel%20Simion-16079959.mp3" type="audio/mp3">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+    <script>
+        // Elemen DOM
+        const checkBtn = document.getElementById('check-btn');
+        const phoneInput = document.getElementById('phone-number');
+        const statusIcon = document.querySelector('.status-icon i');
+        const statusTitle = document.querySelector('.status-title');
+        const statusMessage = document.querySelector('.status-message');
+        const soundControl = document.getElementById('sound-control');
+        const scarySound = document.getElementById('scary-sound');
+        
+        // Status acak untuk simulasi
+        const statuses = [
+            { type: 'safe', title: 'Aman!', message: 'Nomor WhatsApp Anda tidak terbanned. Terus gunakan dengan bijak!', icon: 'fa-check-circle', color: 'status-safe' },
+            { type: 'banned', title: 'Terbanned!', message: 'Nomor WhatsApp ini telah dibanned. Jangan putus asa, ada solusinya!', icon: 'fa-times-circle', color: 'status-banned' },
+            { type: 'warning', title: 'Peringatan!', message: 'Nomor WhatsApp Anda memiliki beberapa pelanggaran. Berhati-hatilah!', icon: 'fa-exclamation-triangle', color: 'status-warning' }
+        ];
+        
+        // Fungsi untuk memeriksa status (simulasi)
+        function checkStatus() {
+            const phoneNumber = phoneInput.value.trim();
+            
+            if (!phoneNumber) {
+                alert('Masukkan nomor telepon terlebih dahulu!');
+                return;
+            }
+            
+            // Simulasi loading
+            statusIcon.className = 'fas fa-spinner fa-spin';
+            statusTitle.textContent = 'Memeriksa...';
+            statusMessage.textContent = 'Sedang memeriksa status banned WhatsApp Anda. Harap tunggu.';
+            
+            // Hapus kelas warna sebelumnya
+            statusIcon.parentElement.classList.remove('status-safe', 'status-banned', 'status-warning');
+            
+            // Set timeout untuk simulasi proses
+            setTimeout(() => {
+                // Pilih status secara acak
+                const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                
+                // Update tampilan dengan status yang dipilih
+                statusIcon.className = `fas ${randomStatus.icon}`;
+                statusIcon.parentElement.classList.add(randomStatus.color);
+                statusTitle.textContent = randomStatus.title;
+                statusMessage.textContent = randomStatus.message;
+                
+                // Jika status banned, putar suara seram
+                if (randomStatus.type === 'banned') {
+                    scarySound.play();
+                    soundControl.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                }
+            }, 2000);
+        }
+        
+        // Kontrol suara
+        function toggleSound() {
+            if (scarySound.paused) {
+                scarySound.play();
+                soundControl.innerHTML = '<i class="fas fa-volume-up"></i>';
+            } else {
+                scarySound.pause();
+                soundControl.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            }
+        }
+        
+        // Event listeners
+        checkBtn.addEventListener('click', checkStatus);
+        soundControl.addEventListener('click', toggleSound);
+        
+        // Validasi input nomor telepon (hanya angka)
+        phoneInput.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+        
+        // Tekan Enter untuk cek status
+        phoneInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkStatus();
+            }
+        });
+    </script>
+</body>
+</html>
